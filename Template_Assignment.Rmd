@@ -21,7 +21,7 @@ require(yaml)
 
 # Title Page
 
-Include your names
+Include youry names
 <<<<<<< HEAD
 Anastasios
 Diego
