@@ -22,7 +22,7 @@ require(yaml)
 # Title Page
 
 Include your names
-Anastasios
+Anastasios, Ingmar
 
 Include the tutorial group number
 
