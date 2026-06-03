@@ -1,5 +1,5 @@
 ---
-title: "Template"
+title: "The education-obesity link across countries over time"
 author: "Studentnames and studentnumbers here"
 date: "`r Sys.Date()`"
 output: pdf_document
