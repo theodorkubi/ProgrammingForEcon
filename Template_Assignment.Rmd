@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, collapse = TRUE, comment = "#>")
 library(tidyverse)
 ```
 
@@ -37,10 +37,9 @@ The fact we are looking at the European aspect of this issue, also adds to its r
 
 ## 2.1 Load in the data
 
-Both datasets are downloaded directly from Eurostat using the eurostat package, so the data is fetched when the document is knitted and nothing needs to be stored in the GitHub repository.
+Both datasets are published by Eurostat. We downloaded them once and saved them as CSV files in the `data/` folder of our repository, which we read into R with `read_csv()`. Using saved copies rather than querying Eurostat live means the report always knits from the same data and does not depend on a network connection or on the Eurostat servers being reachable. The files are small, so storing them in the repository keeps the project self-contained and reproducible: anyone who clones it can knit the report without extra setup.
 
 ```{r loading_data}
-library(tidyverse)
 
 # Load the saved datasets from our repository
 bmi_edu <- read_csv("data/bmi_edu.csv")
@@ -54,15 +53,33 @@ obesity_trend <- read_csv("data/obesity_trend.csv")
 head(bmi_edu)
 head(obesity_trend)
 ```
-Our first dataset, bmi_edu, comes from Eurostat and is called "Body mass index (BMI) by sex, age and educational attainment level" (dataset code hlth_ehis_bm1e). It is based on the European Health Interview Survey (EHIS), a survey in which people across European countries report their own height and weight. For each country and year, the dataset gives the percentage of people in different BMI categories (such as normal weight, overweight, and obese), broken down by education level, sex, and age. Because the survey is only carried out every few years, the data covers a small number of waves (around 2014 and 2019). This dataset is central to our project because it is the one that connects weight to education level.
+Our first dataset, bmi_edu (Eurostat code hlth_ehis_bm1e, Body mass index (BMI) by sex, age and educational attainment level), comes from the European Health Interview Survey (EHIS), in which respondents report their own height and weight (Eurostat, n.d.-a). For each country and year it gives the share of people in each BMI category, broken down by education level, sex, and age. EHIS runs only every few years, so the data covers mainly the 2014 and 2019 waves. This is the dataset that links weight to education, so it is central to our analysis.
 
-Our second dataset, obesity_trend, also comes from Eurostat and is called "Obesity rate by body mass index (BMI)" (dataset code sdg_02_10). It is one of Eurostat's Sustainable Development Goal (SDG) monitoring indicators, built from European health surveys in which adults report their own height and weight. For each country and year, it gives the percentage of people in different BMI categories such as overweight and obese. Unlike our first dataset, it does not break the figures down by education level, but it covers more years per country (for example 2008, 2014, 2017, 2019 and 2022), which makes it well suited for showing how obesity has changed over time. This dataset is important for our project because it provides the "over time" and "across countries" side of our research question.
+Our second dataset, obesity_trend (Eurostat code sdg_02_10, Obesity rate by body mass index (BMI)), is one of the EU's Sustainable Development Goal indicators, also based on self-reported health surveys (Eurostat, n.d.-b). It does not split the figures by education, but it covers many more years (2008, 2014, 2017, 2019, 2022), which makes it well suited to tracking obesity over time. It supplies the "across countries, over time" side of our research question. The data are reported by country, covering the EU member states together with several additional European countries, each shown as a two-letter code in the geo column.
 
 ## 2.3 Describe the type of variables included
 
-The variables in our datasets fall into a few types. The main health information is the BMI/obesity measure — the share of people who are overweight or obese (the bmi and values columns). The main socioeconomic (SES) information is the education level (the isced11 column in bmi_edu), which is the variable at the centre of our research question. The remaining variables — sex, age, country (geo) and year (TIME_PERIOD) — are background characteristics that let us split the figures by group, country and time.
-In terms of how the data was collected, neither dataset comes from administrative sources such as hospital or government records. Both are based on surveys in which people are interviewed and report their own height and weight. This has two consequences. First, because height and weight are self-reported, obesity tends to be slightly underestimated, as people often round their weight down. Second, our two datasets are not fully independent, because the SDG indicator (obesity_trend) is partly built on the same European Health Interview Survey as bmi_edu — so they are related rather than two completely separate sources.
-We chose these two datasets together on purpose: bmi_edu provides the education breakdown we need, while obesity_trend gives a longer view over time and across countries. Because both rely on self-reported survey data, our analysis can describe patterns and associations — for example, that obesity is more common among lower-educated groups — but it cannot prove that education causes obesity.
+```{r variables_table, echo=FALSE}
+variables <- tribble(
+  ~Variable,     ~Type,        ~Dataset,   ~Meaning,
+  "freq",        "character",  "both",     "data frequency (A = annual)",
+  "unit",        "character",  "both",     "unit of measurement (PC = percentage)",
+  "bmi",         "character",  "both",     "BMI category (e.g. overweight, obese)",
+  "isced11",     "character",  "bmi_edu",  "education level (ISCED 2011 group)",
+  "sex",         "character",  "bmi_edu",  "sex (M, F, T = total)",
+  "age",         "character",  "bmi_edu",  "age group",
+  "geo",         "character",  "both",     "country (Eurostat code)",
+  "TIME_PERIOD", "numeric",    "both",     "survey year",
+  "values",      "numeric",    "both",     "share of people in that category"
+)
+
+knitr::kable(variables, caption = "Variables in the two datasets.")
+```
+
+As Table 1 shows, the variables fall into three groups. The health measure is BMI/obesity itself, the share of people in each weight category (the `bmi` and `values` columns). The socioeconomic measure is education (the `isced11` column in `bmi_edu`), which is the variable at the heart of our question. The remaining columns (`sex`, `age`, `geo` for country, and `TIME_PERIOD` for year) are background characteristics that we use to split the figures by group, place, and time.
+
+Neither dataset comes from administrative records; both rely on surveys in which people report their own height and weight. This has two implications. First, self reported data tends to underestimate obesity slightly, since people often round their weight down. Second, the two datasets are not fully independent: the SDG indicator is partly built on the same EHIS survey as `bmi_edu`, so they are related rather than separate sources. We combined them deliberately: `bmi_edu` provides the education breakdown, while `obesity_trend` adds the longer time span. Because both are self reported survey data, our analysis can describe associations (for example, that obesity is more common among lower educated groups) but cannot show that education causes obesity.
+
 
 # Part 3 - Quantifying
 
@@ -194,8 +211,6 @@ Provide the link to your PUBLIC repository here: ...
 
 Use APA referencing throughout your document.
 
-Eurostat. (2025). Overweight and obesity by sex, age and educational attainment level — SDG indicator [Data set]. European Commission. https://ec.europa.eu/eurostat/databrowser/view/sdg_02_10
+Eurostat. (n.d.-a). Body mass index (BMI) by sex, age and educational attainment level [Data set]. Retrieved June 7, 2026, from https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_bm1e
 
-Dataset 2 — European Health Interview Survey, BMI
-
-Eurostat. (2023). Body mass index (BMI) by sex, age and educational attainment level — European Health Interview Survey [Data set]. European Commission. https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_bm1e
+Eurostat. (n.d.-b). Obesity rate by body mass index (BMI) [Data set]. Retrieved June 7, 2026, from https://ec.europa.eu/eurostat/databrowser/view/sdg_02_10
