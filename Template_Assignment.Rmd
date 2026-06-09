@@ -86,12 +86,12 @@ Neither dataset comes from administrative records; both rely on surveys in which
 
 Stefan add explanation here 
 
-# Cleaning Step 1: Filter and clean the first dataset
+**Cleaning Step 1: Filter and clean the first dataset**
 ```{r}
 bmi_edu_clean <- bmi_edu %>%
   filter(
     bmi == "BMI_GE30",                        # Keep only Obese rows
-    isced11 %in% c("ED0-2", "ED3-4", "ED5-8"), # Separate the 3 education groups
+    isced11 %in% c("ED0-2", "ED3_4", "ED5-8"), # Separate the 3 education groups
     sex == "T",                              # Combined sexes
     age == "TOTAL"                          # Combined adult age group
   ) %>%
@@ -102,7 +102,7 @@ bmi_edu_clean <- bmi_edu %>%
 
 and here 
 
-# Cleaning Step 2: Filter and clean the second dataset
+**Cleaning Step 2: Filter and clean the second dataset**
 ```{r}
 
 obesity_trend_clean <- obesity_trend %>%
@@ -115,15 +115,12 @@ obesity_trend_clean <- obesity_trend %>%
 
 and here 
   
-# Cleaning Step 3: Combine both datasets into one master file
+**Cleaning Step 3: Combine both datasets into one master file**
 ```{r}
 combined_dataset <- inner_join(bmi_edu_clean, obesity_trend_clean, by = c("geo", "TIME_PERIOD"))
 ```
 
 and here 
-
-  
-Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
 
 ## 3.2 Generate necessary variables
 
@@ -138,7 +135,7 @@ bmi_edu_with_var1 <- combined_dataset %>%
   mutate(
     edu_level = case_when(
       isced11 == "ED0-2" ~ "Low Education",
-      isced11 == "ED3-4" ~ "Medium Education",
+      isced11 == "ED3_4" ~ "Medium Education",
       isced11 == "ED5-8" ~ "High Education"
     )
   )
@@ -162,7 +159,6 @@ gap_data <- bmi_edu_with_var1 %>%
 Variable 2
 
 ```{r gen_var2}
-library(dplyr)
 
 # Create Variable 2: Calculate the obesity inequality gap
 final_gap_data <- gap_data %>%
