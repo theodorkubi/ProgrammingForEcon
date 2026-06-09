@@ -23,9 +23,6 @@ Tutorial lecturer: Simon Loop
 
 The social problem we have identified is the link between the BMI Index and educational attainment level, bridging two data sets from Eurostat to compare and identify any correlation between the two factors. 
 
-
-Use APA referencing throughout your document. [Here's a link to some explanation.](https://www.mendeley.com/guides/apa-citation-guide/)
-
 ## 1.1 Describe the Social Problem
 
 The relevance of these two variables, BMI and education levels, and how they are correlated with each other lies in the fact that obesity comes with serious health risks, such as diabetes and cardiovascular issues, which are often more common among people with lower educational attainment (World Health Organization, 2022; European Commission, 2024). This then results in the burden of health risks being disproportionately put on the lower educated class of society, and further increases social inequality issues. Beyond the health risks themselves, education has a clear impact on the ability of a person to maintain a healthy lifestyle, as higher education often comes with higher income, better access to higher quality food and so on. This means that addressing obesity cannot be done through increasing awareness alone, and that broader structural interventions, such as food pricing policies or workplace conditions need to be considered.
@@ -87,7 +84,7 @@ Neither dataset comes from administrative records; both rely on surveys in which
 
 ## 3.1 Data cleaning
 
-Say we want to include only larger distances (above 2) in our dataset, we can filter for this.
+Stefan add explanation here 
 
 # Cleaning Step 1: Filter and clean the first dataset
 ```{r}
@@ -103,6 +100,7 @@ bmi_edu_clean <- bmi_edu %>%
   
 ```
 
+and here 
 
 # Cleaning Step 2: Filter and clean the second dataset
 ```{r}
@@ -115,19 +113,22 @@ obesity_trend_clean <- obesity_trend %>%
   drop_na(trend_value)
 ```
 
-
+and here 
   
 # Cleaning Step 3: Combine both datasets into one master file
 ```{r}
 combined_dataset <- inner_join(bmi_edu_clean, obesity_trend_clean, by = c("geo", "TIME_PERIOD"))
 ```
 
-
+and here 
 
   
 Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
 
 ## 3.2 Generate necessary variables
+
+and here 
+
 
 Variable 1
 
