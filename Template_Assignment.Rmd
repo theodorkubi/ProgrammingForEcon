@@ -171,25 +171,65 @@ final_gap_data <- gap_data %>%
 
 ```{r}
 # First I make a vector of the landcodes of the countries in Europe with the largest population, because using every country from the datasets will make the visualisation really chaotic.
-largest_european_countries <- c("RU", "TR", "DE", "GB", "FR", "IT", "ES", "UA", "PL", "RO")
-# RU:Russia, TR:Turkey, DE:Germany, GB:UnitedKingdom, FR:France, IT:Italy, ES:Spain, UA:Ukraine, PL:Poland, RO:Romania
+largest_european_countries <- c("RU", "TR", "DE", "UK", "FR", "IT", "ES", "UA", "PL", "RO")
+# RU:Russia, TR:Turkey, DE:Germany, UK:UnitedKingdom, FR:France, IT:Italy, ES:Spain, UA:Ukraine, PL:Poland, RO:Romania
 
 # The following code only selects the countries that are ACTUALLY in the dataset. So now if Russia, for example, is not in the dataset, R does not crash.
 selected_countries <- largest_european_countries[
-  largest_european_countries %in% final_gap_data$geo
+  largest_european_countries %in% obesity_trend_clean$geo
 ]
 
 # This line shows the countries that are selected.
 selected_countries
+
+obesity_trend_clean %>% 
+  filter(geo %in% selected_countries) %>% 
+  ggplot(aes(x = TIME_PERIOD, y = trend_value, color = geo, group = geo)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+    labs(
+      title = "Temporal variation in obesity rates",
+      subtitle = "Largest European countries in the dataset",
+      x = "Year",
+      y = "Obesity rate (%)",
+      color = "Country"
+    ) +
+    theme_minimal()
+# line 185: we can not use final_gap_data because otherwise we do not have the required periods since this only has 2014 and 2019, that is why I used obesity_trend_clean because now we have more than enough periods.
+# Line 186: This filters only the selected countries from the dataset
+# Line 187: this plots the obesity over time, x is the years on the x-axis, y is the obesity rate on the y-axis, color equals geo gives every country a different color, and group=geo connects all the lines.
+# Lines 188-197: the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
+  
 ```
 
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
+latest_year <- max(final_gap_data$TIME_PERIOD, na.rm = TRUE)
 
+final_gap_data %>%
+  filter(TIME_PERIOD == latest_year) %>%
+  ggplot(aes(x = reorder(geo, obesity_gap), y = obesity_gap)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = paste("Spatial variation in the education-obesity gap in", latest_year),
+    subtitle = "Difference between low and high education obesity rates across countries",
+    x = "Country",
+    y = "Obesity gap, percentage points"
+  ) +
+  theme_minimal()
+
+# Line 208 selects the last year that we are able to use
+# Line 211 filters out everything except the last year
+# Line 212-221: creates the plot geom_col makes the bar plot, coord_flip flips the plot so it is nicer to read.The last few lines create the titles and labels.
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
+
+This figure shows the regional differences in the education-obesity gap between countries in the most recent year for which data is available. The gap is calculated by subtracting the percentage of obese people among the low-skilled from the percentage of obese people among the highly skilled.
+
+A positive value indicates that obesity is more prevalent among the low-educated. The countries are ranked according to the size of the gap, making it easier to see where education-related inequality in obesity is greatest.
 
 ## 3.5 Visualize sub-population variation
 
