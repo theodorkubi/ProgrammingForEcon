@@ -23,14 +23,13 @@ Tutorial lecturer: Simon Loop
 
 The social problem we have identified is the link between the BMI Index and educational attainment level, bridging two data sets from Eurostat to compare and identify any correlation between the two factors. 
 
-
-Use APA referencing throughout your document. [Here's a link to some explanation.](https://www.mendeley.com/guides/apa-citation-guide/)
-
 ## 1.1 Describe the Social Problem
 
 The relevance of these two variables, BMI and education levels, and how they are correlated with each other lies in the fact that obesity comes with serious health risks, such as diabetes and cardiovascular issues, which are often more common among people with lower educational attainment (World Health Organization, 2022; European Commission, 2024). This then results in the burden of health risks being disproportionately put on the lower educated class of society, and further increases social inequality issues. Beyond the health risks themselves, education has a clear impact on the ability of a person to maintain a healthy lifestyle, as higher education often comes with higher income, better access to higher quality food and so on. This means that addressing obesity cannot be done through increasing awareness alone, and that broader structural interventions, such as food pricing policies or workplace conditions need to be considered.
 
-The fact we are looking at the European aspect of this issue also adds to its relevance. By looking at multiple countries over time, it becomes possible to assess whether this education gap in obesity rates is a universal pattern across Europe or whether certain countries have managed to narrow it. This kind of cross country comparison is useful for understanding what policy approaches may actually work in practice, especially since educational inequalities in obesity have been documented across Europe in recent research (World Health Organization, 2022; European Commission, 2024).
+The fact we are looking at the European aspect of this issue also adds to its relevance. By looking at multiple countries over time, it becomes possible to assess whether this education gap in obesity rates is a universal pattern across Europe or whether certain countries have managed to narrow it. This kind of cross country comparison is useful for understanding what policy approaches may actually work in practice, especially since educational inequalities in obesity have been documented across Europe in recent research (World Health Organization, 2022; European Commission, 2024). 
+
+While the existence of an educational gradient in obesity is well established in the literature (World Health Organization, 2022; European Commission, 2024), far less is settled about how this gap behaves over time and whether it is narrowing or widening across different European countries. Much existing work documents the association at a single point in time or within individual countries, which leaves the question of long-term, cross country trends comparatively underexplored. This is the gap our project addresses: by tracking obesity rates by education level across multiple European countries and survey years, we aim to establish whether the education obesity divide is a stable, universal pattern or one that some countries have managed to reduce.
 
 
 # Part 2 - Data Sourcing
@@ -85,14 +84,14 @@ Neither dataset comes from administrative records; both rely on surveys in which
 
 ## 3.1 Data cleaning
 
-Say we want to include only larger distances (above 2) in our dataset, we can filter for this.
+Stefan add explanation here 
 
-# Cleaning Step 1: Filter and clean the first dataset
+**Cleaning Step 1: Filter and clean the first dataset**
 ```{r}
 bmi_edu_clean <- bmi_edu %>%
   filter(
     bmi == "BMI_GE30",                        # Keep only Obese rows
-    isced11 %in% c("ED0-2", "ED3-4", "ED5-8"), # Separate the 3 education groups
+    isced11 %in% c("ED0-2", "ED3_4", "ED5-8"), # Separate the 3 education groups
     sex == "T",                              # Combined sexes
     age == "TOTAL"                          # Combined adult age group
   ) %>%
@@ -101,8 +100,9 @@ bmi_edu_clean <- bmi_edu %>%
   
 ```
 
+and here 
 
-# Cleaning Step 2: Filter and clean the second dataset
+**Cleaning Step 2: Filter and clean the second dataset**
 ```{r}
 
 obesity_trend_clean <- obesity_trend %>%
@@ -113,19 +113,19 @@ obesity_trend_clean <- obesity_trend %>%
   drop_na(trend_value)
 ```
 
-
+and here 
   
-# Cleaning Step 3: Combine both datasets into one master file
+**Cleaning Step 3: Combine both datasets into one master file**
 ```{r}
 combined_dataset <- inner_join(bmi_edu_clean, obesity_trend_clean, by = c("geo", "TIME_PERIOD"))
 ```
 
-
-
-  
-Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
+and here 
 
 ## 3.2 Generate necessary variables
+
+and here 
+
 
 Variable 1
 
@@ -135,7 +135,7 @@ bmi_edu_with_var1 <- combined_dataset %>%
   mutate(
     edu_level = case_when(
       isced11 == "ED0-2" ~ "Low Education",
-      isced11 == "ED3-4" ~ "Medium Education",
+      isced11 == "ED3_4" ~ "Medium Education",
       isced11 == "ED5-8" ~ "High Education"
     )
   )
@@ -159,7 +159,6 @@ gap_data <- bmi_edu_with_var1 %>%
 Variable 2
 
 ```{r gen_var2}
-library(dplyr)
 
 # Create Variable 2: Calculate the obesity inequality gap
 final_gap_data <- gap_data %>%
@@ -232,11 +231,9 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 ## 5.1 Github repository link
 
-Provide the link to your PUBLIC repository here: ...
+https://github.com/theodorkubi/ProgrammingForEcon
 
 ## 5.2 Reference list
-
-Use APA referencing throughout your document.
 
 European Commission. (2024). Health inequalities: Overweight and obesity. Knowledge4Policy. https://knowledge4policy.ec.europa.eu/health-promotion-knowledge-gateway/health-inequalities-5_en
 
