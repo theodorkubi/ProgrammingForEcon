@@ -170,6 +170,22 @@ final_gap_data <- gap_data %>%
     obesity_gap = `Low Education` - `High Education`
   )
 ```
+Variable 3
+
+```{r gen_var3}
+# Create Variable 3: How did the gap change between 2014 and 2019?
+gap_change_data <- final_gap_data %>%
+  select(geo, TIME_PERIOD, obesity_gap) %>%
+  pivot_wider(
+    names_from = TIME_PERIOD,
+    values_from = obesity_gap,
+    names_prefix = "gap_"
+  ) %>%
+  mutate(gap_change = gap_2019 - gap_2014) %>%
+  drop_na(gap_change)
+```
+
+The variable `gap_change` measures whether educational inequality in obesity widened or narrowed in each country between the two survey waves. A positive value means the gap between low and high educated groups grew; a negative value means the country managed to reduce it. This goes directly to the core of our research question, since it separates countries where the problem is getting worse from countries that may hold policy lessons.
 
 ## 3.3 Visualize temporal variation
 
