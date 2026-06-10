@@ -185,9 +185,27 @@ selected_countries
 
 obesity_trend_clean %>% 
   filter(geo %in% selected_countries) %>% 
-  ggplot(aes(x = TIME_PERIOD, y = trend_value, color = geo, group = geo)) +
+mutate(
+  country_name = case_when(
+    geo == "RU" ~ "Russia",
+    geo == "TR" ~ "Turkey",
+    geo == "DE" ~ "Germany",
+    geo == "UK" ~ "United Kingdom",
+    geo == "FR" ~ "France",
+    geo == "IT" ~ "Italy",
+    geo == "ES" ~ "Spain",
+    geo == "UA" ~ "Ukraine",
+    geo == "PL" ~ "Poland",
+    geo == "RO" ~ "Romania",
+    TRUE ~ geo
+  )
+) %>%
+  ggplot(aes(x = TIME_PERIOD, y = trend_value, color = country_name, group = country_name)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_x_continuous(
+    breaks = sort(unique(obesity_trend_clean$TIME_PERIOD))
+  ) +
     labs(
       title = "Temporal variation in obesity rates",
       subtitle = "Largest European countries in the dataset",
@@ -202,6 +220,9 @@ obesity_trend_clean %>%
 # Lines 188-197: the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
   
 ```
+This figure shows temporal variation in obesity rates for the largest European countries available in the dataset. Full country names are used in the legend to make the graph easier to interpret. 
+
+Some country lines start later than others because not all countries have data available for every year in the dataset. When a country has missing observations in earlier years, the line only starts from the first year for which data is available. Therefore, differences in starting points reflect differences in data availability, not necessarily differences in when obesity became relevant in those countries.
 
 ## 3.4 Visualize spatial variation
 
