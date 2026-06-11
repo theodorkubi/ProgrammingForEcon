@@ -87,7 +87,7 @@ Neither dataset comes from administrative records; both rely on surveys in which
 
 ## 3.1 Data cleaning
 
-Stefan add explanation here 
+Data is cleaned in three steps.
 
 **Cleaning Step 1: Filter and clean the first dataset**
 ```{r}
@@ -103,8 +103,7 @@ bmi_edu_clean <- bmi_edu %>%
   
 ```
 
-and here 
-
+Step 1: We filter out the bmi_edu dataset, to isolate obesity rates(BMI_GE=>30) across three core education levels ( ED0-2 for low, ED3_4 for medium and ED5-8 for high). We restricted the demographics to combined sexes (T) and combined adult age group (TOTAL) to establish a baseline for comparing education levels against obesity prevalance.
 **Cleaning Step 2: Filter and clean the second dataset**
 ```{r}
 
@@ -116,18 +115,18 @@ obesity_trend_clean <- obesity_trend %>%
   drop_na(trend_value)
 ```
 
-and here 
+Step 2: We filter out the  obesity_trend dataset to keep only the obesity figures (BMI>=30).This isolates the specific comparative baseline needed to validate against our education-stratified data.
   
 **Cleaning Step 3: Combine both datasets into one master file**
 ```{r}
 combined_dataset <- inner_join(bmi_edu_clean, obesity_trend_clean, by = c("geo", "TIME_PERIOD"))
 ```
 
-and here 
+Step 3: We perform a multi-key inner_join to merge bmi_edu_clean and obesity_trend_clean by country(geo) and year (TIME_PERIOD).This aligns the education-specific obesity rates side-by-side with national obesity trends for comparison by country and year. 
 
 ## 3.2 Generate necessary variables
 
-and here 
+We created three new variables which add analytical value
 
 
 Variable 1
@@ -144,7 +143,7 @@ bmi_edu_with_var1 <- combined_dataset %>%
   )
 ```
 
-
+The variable `bmi_edu_with_var1` transforms ISCED codes into human readable education levels, by mapping the codes to an explicit categorical variable (edu_level).
 ```{r}
 # Reshaping before subtracting
 gap_data <- bmi_edu_with_var1 %>%
@@ -158,7 +157,7 @@ gap_data <- bmi_edu_with_var1 %>%
   )
 ```
 
-and here 
+To calculate the gap in obesity between different education levels by country and year, the data must be shaped from a long to a wide format using pivot_wider(). This transforms the values of edu_level into distinct columns (Low Education, Medium Education, High Education), positioning the respective obesity rates for a single country and year onto a single row.
 
 Variable 2
 
@@ -170,6 +169,8 @@ final_gap_data <- gap_data %>%
     obesity_gap = `Low Education` - `High Education`
   )
 ```
+The variable final_gap_data calculates the gap in obesity between education levels by subtracting the obesity rate of the highest education group from the lowest education group.A positive obesity_gap value indicates that obesity is more prevalent among individuals with lower education.This metric allows us to directly evaluate and compare te health inequalities across different European nations and trends over time.
+
 Variable 3
 
 ```{r gen_var3}
