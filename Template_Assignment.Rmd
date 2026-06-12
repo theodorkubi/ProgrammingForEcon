@@ -250,19 +250,53 @@ Some country lines start later than others because not all countries have data a
 ```{r visualise_map}
 latest_year <- max(final_gap_data$TIME_PERIOD, na.rm = TRUE)
 
-final_gap_data %>%
+gap_map_data <- final_gap_data %>%
   filter(TIME_PERIOD == latest_year) %>%
-  ggplot(aes(x = reorder(geo, obesity_gap), y = obesity_gap)) +
-  geom_col() +
-  coord_flip() +
+  mutate(
+    iso_a2 = recode(
+      geo,
+      "EL" = "GR",
+      .default = geo
+      
+    )
+  )
+
+europe_map <- ne_countries(
+  scale = "medium",
+  continent = "Europe",
+  returnclass = "sf"
+) %>%
+  select(iso_a2, name, geometry)
+
+spatial_map <- europe_map %>%
+  left_join(gap_map_data, by = "iso_a2")
+
+ggplot(spatial_map) +
+  geom_sf(aes(fill = obesity_gap), color = "white", linewidth = 0.2) +
+  scale_fill_gradient2(
+    low = "blue",
+    mid = "white",
+    high = "red",
+    midpoint = 0,
+    na.value = "grey90"
+  ) +
+  coord_sf(
+    xlim = c(-25, 45),
+    ylim = c(34, 72),
+    expand = FALSE
+  ) +
   labs(
     title = paste("Spatial variation in the education-obesity gap in", latest_year),
-    subtitle = "Difference between low and high education obesity rates across countries",
-    x = "Country",
-    y = "Obesity gap, percentage points"
+    subtitle = "Difference between low and high education obesity rates across European countries",
+    fill = "Obesity gap\npercentage points"
   ) +
-  theme_minimal()
-
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    panel.grid = element_blank()
+  )
+  
 # Line 208 selects the last year that we are able to use
 # Line 211 filters out everything except the last year
 # Line 212-221: creates the plot geom_col makes the bar plot, coord_flip flips the plot so it is nicer to read.The last few lines create the titles and labels.
