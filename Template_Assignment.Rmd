@@ -1,14 +1,18 @@
 ---
-title: "The education-obesity link across countries over time"
-author: "Anastasios Goudras(2855565), Thedor Kubicka (2847510), Stefan Ivanov(2892839),
-Omar El-Nawawi(2894419), Ingmar Reijers(2890403), Diego Melendez(2841772)"
+title: "The education-obesity link across countries over time."
+subtitle: |
+  | Tutorial group: 6.1
+  | Tutorial lecturer: Simon Loop
+author: |
+  | Anastasios Goudras (2855565), Theodor Kubicka (2847510),
+  | Stefan Ivanov (2892839), Omar El-Nawawi (2894419),
+  | Ingmar Reijers (2890403), Diego Melendez (2841772)
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output:
   pdf_document:
     toc: true
     toc_depth: 2
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, collapse = TRUE, comment = "#>")
 library(tidyverse)
@@ -16,12 +20,6 @@ library(sf)
 library(rnaturalearth)
 library(rnaturalearthdata)
 ```
-
-# Title Page
-
-Tutorial group: 6.1
-
-Tutorial lecturer: Simon Loop
 
 # Part 1 - Identify a Social Problem
 
@@ -58,7 +56,7 @@ head(obesity_trend)
 ```
 Our first dataset, bmi_edu (Eurostat code hlth_ehis_bm1e, Body mass index (BMI) by sex, age and educational attainment level), comes from the European Health Interview Survey (EHIS), in which respondents report their own height and weight (Eurostat, n.d.-a). For each country and year it gives the share of people in each BMI category, broken down by education level, sex, and age. EHIS runs only every few years, so the data covers mainly the 2014 and 2019 waves. This is the dataset that links weight to education, so it is central to our analysis.
 
-Our second dataset, obesity_trend (Eurostat code sdg_02_10, Obesity rate by body mass index (BMI)), is one of the EU's Sustainable Development Goal indicators, also based on self-reported health surveys (Eurostat, n.d.-b). It does not split the figures by education, but it covers many more years (2008, 2014, 2017, 2019, 2022), which makes it well suited to tracking obesity over time. It supplies the "across countries, over time" side of our research question. The data are reported by country, covering the EU member states together with several additional European countries, each shown as a two-letter code in the geo column.
+Our second dataset, obesity_trend (Eurostat code sdg_02_10, Obesity rate by body mass index (BMI)), is one of the EU's Sustainable Development Goal indicators, also based on self-reported health surveys (Eurostat, n.d.-b). It does not split the figures by education, but it covers many more years (2008, 2014, 2017, 2019, 2022, 2025), which makes it well suited to tracking obesity over time. It supplies the "across countries, over time" side of our research question. The data are reported by country, covering the EU member states together with several additional European countries, each shown as a two-letter code in the geo column.
 
 ## 2.3 Describe the type of variables included
 
@@ -170,7 +168,7 @@ final_gap_data <- gap_data %>%
     obesity_gap = `Low Education` - `High Education`
   )
 ```
-The variable final_gap_data calculates the gap in obesity between education levels by subtracting the obesity rate of the highest education group from the lowest education group.A positive obesity_gap value indicates that obesity is more prevalent among individuals with lower education.This metric allows us to directly evaluate and compare te health inequalities across different European nations and trends over time.
+The variable final_gap_data calculates the gap in obesity between education levels by subtracting the obesity rate of the highest education group from the lowest education group. A positive obesity_gap value indicates that obesity is more prevalent among individuals with lower education. This metric allows us to directly evaluate and compare the health inequalities across different European nations and trends over time.
 
 Variable 3
 
@@ -200,9 +198,6 @@ largest_european_countries <- c("RU", "TR", "DE", "UK", "FR", "IT", "ES", "UA", 
 selected_countries <- largest_european_countries[
   largest_european_countries %in% obesity_trend_clean$geo
 ]
-
-# This line shows the countries that are selected.
-selected_countries
 
 obesity_trend_clean %>% 
   filter(geo %in% selected_countries) %>% 
@@ -364,8 +359,7 @@ A map is used because the goal is to visualise differences across geographic spa
 
 ## 3.5 Visualize sub-population variation
 
-What is the obesity rate by country?
-```{r visualise_subpopulations, echo=FALSE}
+```{r visualise_subpopulations, echo=FALSE, fig.width=6.5, fig.height=4, out.width="90%", fig.align="center"}
 
 subpop_data <- bmi_edu %>%
   filter(
@@ -401,13 +395,15 @@ ggplot(subpop_data, aes(x = edu_level, y = values)) +
 
 ```
 
-The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate.
+Obesity is most prevalent among the low educated (median around 19%), lower among the medium-educated (around 17%), and lowest among the high educated (around 12%), a difference of roughly 7.5 percentage points between the lowest and highest groups. Because this gradient holds across the full set of European countries in the sample rather than being driven by a few outliers, it confirms at the population level that the education-obesity link is a broad, consistent pattern.
+
+
 
 ## 3.6 Event analysis
 
-In this section we analyze how obesity rates among low and high educated groups relate to each other across countries.
+In this section we treat the COVID-19 pandemic as an event and compare EU27 obesity rates by education level before (2019) and after (2022) it.
 
-```{r analysis}
+```{r analysis, echo=FALSE}
 
 # Our event is the COVID-19 pandemic (2020-2022)
 # Pre-event: 2019 (bmi_edu_clean — education stratified)
@@ -462,14 +458,15 @@ ggplot(event_plot_data, aes(x = factor(year), y = obesity_rate,
   theme_minimal()
 ```
 
-The plot above is relevant to our social problem because it shows per country if our hypothesis is true. It also shows for which countries the theory holds more. The reason why we put the regression line with confidence band is because it clearly shows which countries are the outliers in obesity rates and which are exceptions. The plot for example shows that in Croatia the lower educated has more than double obesity rate than higher educated. This is also visible in the spatial variation. So it is clear that our graphs support each other.
+This plot treats the COVID-19 pandemic as an event and compares obesity at the EU27 level before it (2019) and after it (2022). In 2019 the education gradient is clear: obesity stood at 18.4% among the low educated, 17.1% among the medium educated, and 11.4% among the high educated, a gap of roughly 7 percentage points between the lowest and highest education groups. After the pandemic, the overall EU27 obesity rate in 2022 was 14.8%. This matters for our social problem because it shows the education gap was already substantial going into a major shared shock, raising the question of whether such an event widens or narrows existing inequalities.
 
+An important limitation must be read alongside the plot. The 2022 figure is the EU27 overall obesity rate, because the survey does not provide a 2022 breakdown by education. The three lines therefore converge to the same point in 2022 only because they are all assigned that single overall value, it is an artifact of missing data, not evidence that the education gap closed during COVID-19. As a result, we can describe obesity before and after the event but cannot attribute any change to the pandemic itself, nor measure how it affected the gap between education groups specifically.
 
 # Part 4 - Discussion
 
 ## 4.1 Discuss your findings
 
-Using two Eurostat datasets on BMI, education, and obesity trends, we cleaned, filtered, and merged the data, then derived three variables: an education label, a low-vs-high-education obesity gap, and the change in that gap between waves. The temporal analysis showed that obesity rates have generally increased across the largest European countries over time, though the pace and starting points differ considerably. Spatially, the education-obesity gap varies strongly across countries, with Croatia, Turkey and Luxembourg showing the largest gaps and Estonia showing a near-zero or even reversed pattern. The sub-population boxplots confirmed that lower education is consistently associated with higher obesity rates across all countries in the dataset. Finally, the event analysis showed a moderate positive correlation r of approximately 0.50 between obesity rates among high and low educated groups, meaning that countries where highly educated people have higher obesity also tend to have higher obesity among the low educated, though the gap between the two groups still persists everywhere, suggesting that education-related inequality in obesity is a structural feature rather than a country-specific anomaly. While self-reported BMI likely understates obesity, the analysis is purely descriptive, the country-level aggregates risk an ecological fallacy, and the moderate correlation leaves much unexplained, the harmonized Eurostat data and the agreement across all four methods still make the education-obesity link convincing.
+Using two Eurostat datasets on BMI, education, and obesity trends, we cleaned, filtered, and merged the data, then derived three variables: an education label, a low-vs-high-education obesity gap, and the change in that gap between waves. The temporal analysis showed that obesity rates have generally increased across the largest European countries over time, though the pace and starting points differ considerably. Spatially, the education-obesity gap varies strongly across countries, with Croatia, Turkey and Luxembourg showing the largest gaps and Estonia showing a near-zero or even reversed pattern. The sub-population boxplots confirmed that lower education is consistently associated with higher obesity rates across all countries in the dataset. Finally, the event analysis set these patterns against the COVID-19 pandemic: at the EU27 level the education gap was already around 7 percentage points before the pandemic in 2019 (18.4% obesity among the low-educated versus 11.4% among the high-educated), indicating that educational inequality in obesity was a substantial, structural feature going into a major shared shock rather than a country-specific anomaly. While self-reported BMI likely understates obesity, the analysis is purely descriptive, the country-level aggregates risk an ecological fallacy, and the absence of an education breakdown for 2022 means we cannot measure how the pandemic itself affected the gap, the harmonized Eurostat data and the agreement across our four visualisations still make the education-obesity link convincing.
 
 # Part 5 - Reproducibility
 
