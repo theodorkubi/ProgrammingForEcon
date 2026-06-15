@@ -234,11 +234,11 @@ mutate(
       color = "Country"
     ) +
     theme_minimal()
-# we can not use final_gap_data because otherwise we do not have the required periods since this only has 2014 and 2019, that is why I used obesity_trend_clean because now we have more than enough periods.
-# This filters only the selected countries from the dataset
-# I changed the name of the shortened country name to the full country name, so FR becomes France in the legend of the graph.
-# this plots the obesity over time, x is the years on the x-axis, y is the obesity rate on the y-axis, color equals geo gives every country a different color, and group=geo connects all the lines.
-# the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
+# Line 206: we can not use final_gap_data because otherwise we do not have the required periods since this only has 2014 and 2019, that is why I used obesity_trend_clean because now we have more than enough periods.
+# Line 207: This filters only the selected countries from the dataset
+# Line 210-220: I changed the name of the shortened country name to the full country name, so FR becomes France in the legend of the graph.
+# Line 223-234: this plots the obesity over time, x is the years on the x-axis, y is the obesity rate on the y-axis, color equals geo gives every country a different color, and group=geo connects all the lines.
+# Also lines 223-234: the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
   
 ```
 This figure shows temporal variation in obesity rates for the largest European countries available in the dataset. Full country names are used in the legend to make the graph easier to interpret. 
@@ -253,11 +253,43 @@ latest_year <- max(final_gap_data$TIME_PERIOD, na.rm = TRUE)
 gap_map_data <- final_gap_data %>%
   filter(TIME_PERIOD == latest_year) %>%
   mutate(
-    iso_a2 = recode(
+    country_name = recode(
       geo,
-      "EL" = "GR",
+      "AT" = "Austria",
+      "BE" = "Belgium",
+      "BG" = "Bulgaria",
+      "CH" = "Switzerland",
+      "CY" = "Cyprus",
+      "CZ" = "Czechia",
+      "DE" = "Germany",
+      "DK" = "Denmark",
+      "EE" = "Estonia",
+      "EL" = "Greece",
+      "ES" = "Spain",
+      "FI" = "Finland",
+      "FR" = "France",
+      "HR" = "Croatia",
+      "HU" = "Hungary",
+      "IE" = "Ireland",
+      "IS" = "Iceland",
+      "IT" = "Italy",
+      "LT" = "Lithuania",
+      "LU" = "Luxembourg",
+      "LV" = "Latvia",
+      "MT" = "Malta",
+      "NL" = "Netherlands",
+      "NO" = "Norway",
+      "PL" = "Poland",
+      "PT" = "Portugal",
+      "RO" = "Romania",
+      "RS" = "Serbia",
+      "SE" = "Sweden",
+      "SI" = "Slovenia",
+      "SK" = "Slovakia",
+      "TR" = "Turkey",
+      "UK" = "United Kingdom",
+      "GB" = "United Kingdom",
       .default = geo
-      
     )
   )
 
@@ -266,10 +298,20 @@ europe_map <- ne_countries(
   continent = "Europe",
   returnclass = "sf"
 ) %>%
-  select(iso_a2, name, geometry)
+  mutate(
+    country_name = case_when(
+      name == "France" ~ "France",
+      name == "United Kingdom" ~ "United Kingdom",
+      name == "Czechia" ~ "Czechia",
+      name == "Türkiye" ~ "Turkey",
+      name == "Turkey" ~ "Turkey",
+      TRUE ~ name
+    )
+  ) %>%
+  select(country_name, geometry)
 
 spatial_map <- europe_map %>%
-  left_join(gap_map_data, by = "iso_a2")
+  left_join(gap_map_data, by = "country_name")
 
 ggplot(spatial_map) +
   geom_sf(aes(fill = obesity_gap), color = "white", linewidth = 0.2) +
@@ -297,14 +339,12 @@ ggplot(spatial_map) +
     panel.grid = element_blank()
   )
   
-# Line 208 selects the last year that we are able to use
-# Line 211 filters out everything except the last year
-# Line 212-221: creates the plot geom_col makes the bar plot, coord_flip flips the plot so it is nicer to read.The last few lines create the titles and labels.
+
 ```
 
-This figure shows the regional differences in the education-obesity gap between countries in the most recent year for which data is available. The gap is calculated by subtracting the percentage of obese people among the low-skilled from the percentage of obese people among the highly skilled.
+This map shows spatial variation in the education-obesity gap across European countries in the latest available year. The education-obesity gap is calculated as the obesity rate among people with low education minus the obesity rate among people with high education. A higher positive value means that obesity is more common among the low educated group compared with the high educated group.
 
-A positive value indicates that obesity is more prevalent among the low-educated. The countries are ranked according to the size of the gap, making it easier to see where education-related inequality in obesity is greatest.
+A map is used because the goal is to visualise differences across geographic space. By placing the values directly on a map of Europe, it becomes easier to see whether the education-obesity gap is larger or smaller in specific parts of Europe. Countries shown in grey either have no available data for the selected year or could not be matched correctly with the map data. To reduce matching problems, country codes from the dataset were converted into full country names before joining the obesity data to the map.
 
 ## 3.5 Visualize sub-population variation
 
@@ -346,43 +386,6 @@ ggplot(subpop_data, aes(x = edu_level, y = values)) +
 ```
 
 The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate. Here you provide a description of why the plot above is relevant to your specific social problem.
-
-
-```{r}
-subpop_data <- bmi_edu %>%
-  filter(
-    bmi == "BMI_GE30",
-    isced11 %in% c("ED0-2", "ED3_4", "ED5-8"),
-    sex == "T",
-    age == "TOTAL"
-  ) %>%
-  mutate(
-    edu_level = case_when(
-      isced11 == "ED0-2" ~ "Low",
-      isced11 == "ED3_4" ~ "Medium",
-      isced11 == "ED5-8" ~ "High"
-    ),
-    edu_level = factor(edu_level, levels = c("Low", "Medium", "High"))
-  ) %>%
-  drop_na(values)
-
-ggplot(subpop_data, aes(x = edu_level, y = values)) +
-  geom_boxplot(fill = "steelblue", alpha = 0.7) +
-  labs(
-    title = "Obesity rates by education level",
-    subtitle = "Distribution across European countries (2014 & 2019)",
-    x = "Education level",
-    y = "Obesity rate (%)"
-  ) +
-  theme_minimal()
-
-#line 241-246 selects the data that is been used
-#line 249-252 gives the three education groups understandable names
-#line 254 fixes the order of education levels
-#line 258-264 creates the boxplot with title and axis labels
-```
-
-The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate.
 
 ## 3.6 Event analysis
 
@@ -450,7 +453,7 @@ Here you provide a description of why the plot above is relevant to your specifi
 # Part 4 - Discussion
 
 ## 4.1 Discuss your findings
-Obesity is a growing public health concern across Europe, and its unequal distribution across education groups raises important questions about structural inequality and the limits of awareness-based policy. To investigate this, we used two Eurostat datasets; one linking BMI to education levels across the 2014 and 2019 EHIS waves, and another tracking obesity trends from 2008 to 2022, which we cleaned, filtered to relevant groups, and merged on country and year. From the combined dataset we derived three additional variables: a readable education label, an obesity inequality gap between low and high educated groups, and a measure of how that gap changed between the two survey waves. The temporal analysis showed that obesity rates have generally increased across the largest European countries over time, though the pace and starting points differ considerably. Spatially, the education-obesity gap varies strongly across countries, with Croatia, Turkey and Luxembourg showing the largest gaps and Estonia showing a near-zero or even reversed pattern. The sub-population boxplots confirmed that lower education is consistently associated with higher obesity rates across all countries in the dataset. Finally, the event analysis showed a moderate positive correlation (r ≈ 0.50) between obesity rates among high and low educated groups, meaning that countries where highly educated people have higher obesity also tend to have higher obesity among the low educated, though the gap between the two groups still persists everywhere, suggesting that education-related inequality in obesity is a structural feature rather than a country-specific anomaly.
+Obesity is a growing public health concern across Europe, and its unequal distribution across education groups raises important questions about structural inequality and the limits of awareness-based policy. To investigate this, we used two Eurostat datasets; one linking BMI to education levels across the 2014 and 2019 EHIS waves, and another tracking obesity trends from 2008 to 2022, which we cleaned, filtered to relevant groups, and merged on country and year. From the combined dataset we derived three additional variables: a readable education label, an obesity inequality gap between low and high educated groups, and a measure of how that gap changed between the two survey waves. The temporal analysis showed that obesity rates have generally increased across the largest European countries over time, though the pace and starting points differ considerably. Spatially, the education-obesity gap varies strongly across countries, with Croatia, Turkey and Luxembourg showing the largest gaps and Estonia showing a near-zero or even reversed pattern. The sub-population boxplots confirmed that lower education is consistently associated with higher obesity rates across all countries in the dataset. Finally, the event analysis showed a moderate positive correlation (r of approximately 0.50) between obesity rates among high and low educated groups, meaning that countries where highly educated people have higher obesity also tend to have higher obesity among the low educated, though the gap between the two groups still persists everywhere, suggesting that education-related inequality in obesity is a structural feature rather than a country-specific anomaly.
 
 
 # Part 5 - Reproducibility
