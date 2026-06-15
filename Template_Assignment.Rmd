@@ -344,9 +344,9 @@ ggplot(spatial_map) +
 # Line 212-221: creates the plot geom_col makes the bar plot, coord_flip flips the plot so it is nicer to read.The last few lines create the titles and labels.
 ```
 
-This figure shows the regional differences in the education-obesity gap between countries in the most recent year for which data is available. The gap is calculated by subtracting the percentage of obese people among the low-skilled from the percentage of obese people among the highly skilled.
+This map shows spatial variation in the education-obesity gap across European countries in the latest available year. The education-obesity gap is calculated as the obesity rate among people with low education minus the obesity rate among people with high education. A higher positive value means that obesity is more common among the low educated group compared with the high educated group.
 
-A positive value indicates that obesity is more prevalent among the low-educated. The countries are ranked according to the size of the gap, making it easier to see where education-related inequality in obesity is greatest.
+A map is used because the goal is to visualise differences across geographic space. By placing the values directly on a map of Europe, it becomes easier to see whether the education-obesity gap is larger or smaller in specific parts of Europe. Countries shown in grey either have no available data for the selected year or could not be matched correctly with the map data. To reduce matching problems, country codes from the dataset were converted into full country names before joining the obesity data to the map.
 
 ## 3.5 Visualize sub-population variation
 
