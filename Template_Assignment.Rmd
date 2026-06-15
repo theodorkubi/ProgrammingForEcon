@@ -234,6 +234,8 @@ mutate(
       color = "Country"
     ) +
     theme_minimal()
+
+# The notes below explain the code above
 # Line 206: we can not use final_gap_data because otherwise we do not have the required periods since this only has 2014 and 2019, that is why I used obesity_trend_clean because now we have more than enough periods.
 # Line 207: This filters only the selected countries from the dataset
 # Line 210-220: I changed the name of the shortened country name to the full country name, so FR becomes France in the legend of the graph.
@@ -339,7 +341,20 @@ ggplot(spatial_map) +
     panel.grid = element_blank()
   )
   
-
+# The notes below explain the code above
+# Line 253 selects the latest possible year from the database to make a map for.
+# Lines 255-296 create the data for the map. All the shortened country names are made into the full names, because otherwise some countries will be missing from our map since shortened names from the databases are not always the same. For example France was different, so when I made the code the first time without renaming the countries to their full country name, France showed up as a grey colour instead of oranged/red like it actually has to be.
+# Line 255: you also see gap_map_data, this is the same as final_gap_data but now it can connect to the map. This is not possible for final_gap_data. After this line the filter is used to only select the data of the latest possible year. Mutate creates a new column for the new full country names. Default = geo uses the original code if a landcode is not in the list, so the code does not crash.
+# Lines 298-301: this code comes from the downloaded package rnaturalearth. The function gets the countries from the map dataset.It only returns the countries in Europe. sf gets the country names and the shapes of the countries. geometry contains the ACTUAL shapes of the countries.
+# lines 303-310 standardises the country names in the mapdata.We use Türkiye and Turkey because different mapdata sometimes use Türkiye but they may also use Turkey, now we have both.
+# line 313: only keeps the country name and the shape of the country.
+# line 315 and 316 connect the data to the map, so R looks up the countries in europe_map and gap_map_data and connects them. Leftjoin is used because the map is the basis, obesity data is only added if the country is on the map and has the relevant data.
+# line 318 asks to plot the map
+# geom_sf draws the shapes of the countries. fill = obesity_gap puts the colour in the countries. color = white adds the white borders between the countries, linewidth makes the width of the border.
+# lines 320-325 decides the colours of the countries, so the percentage points that are matched with the countries for example low mid high percentage points countries, the midpoint and the countries that have missing values.
+# lines 327-330: zooms the map in on Europe.
+# lines 332-335 creates the legend.
+# lines 337-341 make the map more clean, so it is nicer to look at.
 ```
 
 This map shows spatial variation in the education-obesity gap across European countries in the latest available year. The education-obesity gap is calculated as the obesity rate among people with low education minus the obesity rate among people with high education. A higher positive value means that obesity is more common among the low educated group compared with the high educated group.
