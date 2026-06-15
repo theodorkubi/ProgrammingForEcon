@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.3)  15 JUN 2026 17:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.3)  15 JUN 2026 17:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -472,36 +472,26 @@ File: Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-c
 Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-6-1.pdf  used on input line 528.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [6] [7 <./Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-6-1.pdf>]
-<Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf, id=64, 469.755pt x 325.215pt>
+Underfull \vbox (badness 10000) detected at line 649
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 649
+ []
+
+[8]
+<Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf, id=68, 469.755pt x 325.215pt>
 File: Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf Graphic file (type pdf)
 <use Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf>
-Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf  used on input line 609.
+Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf  used on input line 651.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[8] [9 <./Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf>]
-<Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf, id=80, 469.755pt x 325.215pt>
+[9] [10 <./Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_map-1.pdf>]
+<Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf, id=84, 469.755pt x 325.215pt>
 File: Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf Graphic file (type pdf)
 <use Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf>
-Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf  used on input line 668.
+Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf  used on input line 715.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[10 <./Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf>]
-<Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-7-1.pdf, id=94, 469.755pt x 325.215pt>
-File: Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
-<use Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 716.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[11] [12 <./Template_Assignment_files/Template_Assignment_files/figure-latex/unnamed-chunk-7-1.pdf>]
-<Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-1.pdf, id=113, 469.755pt x 325.215pt>
-File: Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-1.pdf Graphic file (type pdf)
-<use Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-1.pdf>
-Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-1.pdf  used on input line 768.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[13 <./Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-1.pdf>]
-<Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-2.pdf, id=127, 469.755pt x 325.215pt>
-File: Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-2.pdf Graphic file (type pdf)
-<use Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-2.pdf>
-Package pdftex.def Info: Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-2.pdf  used on input line 806.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[14 <./Template_Assignment_files/Template_Assignment_files/figure-latex/analysis-2.pdf>]
+[11 <./Template_Assignment_files/Template_Assignment_files/figure-latex/visualise_subpopulations-1.pdf>]
 
 ! LaTeX Error: Unicode character ≈ (U+2248)
                not set up for use with LaTeX.
@@ -510,17 +500,17 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.865 moderate positive correlation (r ≈
+l.756 moderate positive correlation (r ≈
                                            0.50) between obesity rates among
 You may provide a definition with
 \DeclareUnicodeCharacter 
 
  
 Here is how much of TeX's memory you used:
- 11957 strings out of 469157
- 189225 string characters out of 5458087
+ 11932 strings out of 469157
+ 187269 string characters out of 5458087
  618760 words of memory out of 5000000
- 40788 multiletter control sequences out of 15000+600000
+ 40767 multiletter control sequences out of 15000+600000
  651046 words of font info for 53 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  88i,7n,93p,448b,547s stack positions out of 10000i,1000n,20000p,200000b,200000s
