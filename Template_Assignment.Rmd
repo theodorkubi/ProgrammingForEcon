@@ -234,11 +234,11 @@ mutate(
       color = "Country"
     ) +
     theme_minimal()
-# we can not use final_gap_data because otherwise we do not have the required periods since this only has 2014 and 2019, that is why I used obesity_trend_clean because now we have more than enough periods.
-# This filters only the selected countries from the dataset
-# I changed the name of the shortened country name to the full country name, so FR becomes France in the legend of the graph.
-# this plots the obesity over time, x is the years on the x-axis, y is the obesity rate on the y-axis, color equals geo gives every country a different color, and group=geo connects all the lines.
-# the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
+# Line 206: we can not use final_gap_data because otherwise we do not have the required periods since this only has 2014 and 2019, that is why I used obesity_trend_clean because now we have more than enough periods.
+# Line 207: This filters only the selected countries from the dataset
+# Line 210-220: I changed the name of the shortened country name to the full country name, so FR becomes France in the legend of the graph.
+# Line 223-234: this plots the obesity over time, x is the years on the x-axis, y is the obesity rate on the y-axis, color equals geo gives every country a different color, and group=geo connects all the lines.
+# Also lines 223-234: the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
   
 ```
 This figure shows temporal variation in obesity rates for the largest European countries available in the dataset. Full country names are used in the legend to make the graph easier to interpret. 
@@ -339,9 +339,7 @@ ggplot(spatial_map) +
     panel.grid = element_blank()
   )
   
-# Line 208 selects the last year that we are able to use
-# Line 211 filters out everything except the last year
-# Line 212-221: creates the plot geom_col makes the bar plot, coord_flip flips the plot so it is nicer to read.The last few lines create the titles and labels.
+
 ```
 
 This map shows spatial variation in the education-obesity gap across European countries in the latest available year. The education-obesity gap is calculated as the obesity rate among people with low education minus the obesity rate among people with high education. A higher positive value means that obesity is more common among the low educated group compared with the high educated group.
