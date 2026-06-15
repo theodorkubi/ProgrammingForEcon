@@ -13,7 +13,7 @@ Both datasets were downloaded from Eurostat and saved as CSV files in the
 | File | Eurostat code | Description | Years |
 |---|---|---|---|
 | `data/bmi_edu.csv` | `hlth_ehis_bm1e` | BMI by sex, age and educational attainment (EHIS survey) | 2014, 2019 |
-| `data/obesity_trend.csv` | `sdg_02_10` | Obesity rate by BMI (SDG indicator) | 2008–2022 |
+| `data/obesity_trend.csv` | `sdg_02_10` | Obesity rate by BMI (SDG indicator) | 2008–2025 |
 
 To re-download the raw data yourself:
 1. Go to https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_bm1e and
