@@ -1,5 +1,5 @@
 ---
-title: "The education-obesity link across countries over time."
+title: "The education-obesity link across countries over time"
 subtitle: |
   | Tutorial group: 6.1
   | Tutorial lecturer: Simon Loop
@@ -12,7 +12,11 @@ output:
   pdf_document:
     toc: true
     toc_depth: 2
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, collapse = TRUE, comment = "#>")
 library(tidyverse)
