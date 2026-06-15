@@ -389,6 +389,67 @@ The plot above is relevant because it clearly shows how a lower education level 
 
 ## 3.6 Event analysis
 
+In this section we analyze how obesity rates among low and high educated groups relate to each other across countries.
+
+```{r analysis}
+
+# Our event is the COVID-19 pandemic (2020-2022)
+# Pre-event: 2019 (bmi_edu_clean — education stratified)
+# Post-event: 2022 (obesity_trend_clean — overall rate)
+
+# Step 1: Get EU27 obesity rate per education group for 2019
+edu_2019 <- bmi_edu_clean %>%
+  filter(TIME_PERIOD == 2019, geo == "EU27_2020") %>%
+  mutate(
+    edu_level = case_when(
+      isced11 == "ED0-2" ~ "Low",
+      isced11 == "ED3_4" ~ "Medium",
+      isced11 == "ED5-8" ~ "High"
+    ),
+    edu_level = factor(edu_level, levels = c("Low", "Medium", "High")),
+    year = 2019
+  ) %>%
+  select(edu_level, year, obesity_rate = bmi_value)
+
+# Step 2: Get EU27 overall obesity rate for 2022
+overall_2022 <- obesity_trend_clean %>%
+  filter(TIME_PERIOD == 2022, geo == "EU27_2020") %>%
+  summarise(obesity_rate = mean(trend_value, na.rm = TRUE)) %>%
+  crossing(
+    edu_level = factor(c("Low", "Medium", "High"), levels = c("Low", "Medium", "High"))
+  ) %>%
+  mutate(year = 2022)
+
+# Step 3: Combine and plot
+event_plot_data <- bind_rows(edu_2019, overall_2022)
+
+ggplot(event_plot_data, aes(x = factor(year), y = obesity_rate,
+                             color = edu_level, group = edu_level)) +
+  geom_line(linewidth = 1.3) +
+  geom_point(size = 3.5) +
+  annotate("rect", xmin = 1.5, xmax = 2.5,
+           ymin = -Inf, ymax = Inf, fill = "grey80", alpha = 0.3) +
+  annotate("text", x = 1.5, y = Inf,
+           label = "COVID-19 (2020)", vjust = 2, hjust = 0.5,
+           size = 3.5, colour = "grey40") +
+  scale_color_manual(
+    values = c("Low" = "#E64B35", "Medium" = "#4DBBD5", "High" = "#00A087")
+  ) +
+  labs(
+    title    = "Event Analysis: COVID-19 and Obesity by Education Group (EU27)",
+    subtitle = "Pre-event: 2019  |  Post-event: 2022",
+    x        = "Year",
+    y        = "Obesity rate (%)",
+    color    = "Education level",
+    caption  = "Note: 2022 uses EU27 overall rate as education breakdown is unavailable for 2022."
+  ) +
+  theme_minimal()
+```
+
+The plot above is relevant to our social problem because it shows per country if our hypothesis is true. It also shows for which countries the theory holds more. The reason why we put the regression line with confidence band is because it clearly shows which countries are the outliers in obesity rates and which are exceptions. The plot for example shows that in Croatia the lower educated has more than double obesity rate than higher educated. This is also visible in the spatial variation. So it is clear that our graphs support each other.
+
+Here you provide a description of why the plot above is relevant to your specific social problem.
+
 # Part 4 - Discussion
 
 ## 4.1 Discuss your findings
