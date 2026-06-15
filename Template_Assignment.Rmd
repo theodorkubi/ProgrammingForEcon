@@ -1,6 +1,6 @@
 ---
 title: "The education-obesity link across countries over time"
-author: "Anastasios Goudras(2855565), Thedor(), Stefan(), Omar(), Ingmar(2890403), Diego Melendez(2841772)"
+author: "Anastasios Goudras(2855565), Thedor Kubicka (2847510), Stefan(), Omar El-Nawawi(2894419), Ingmar(2890403), Diego Melendez(2841772)"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output:
   pdf_document:
