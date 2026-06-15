@@ -190,7 +190,7 @@ The variable `gap_change` measures whether educational inequality in obesity wid
 
 ## 3.3 Visualize temporal variation
 
-```{r}
+```{r echo=FALSE}
 # First I make a vector of the landcodes of the countries in Europe with the largest population, because using every country from the datasets will make the visualisation really chaotic.
 largest_european_countries <- c("RU", "TR", "DE", "UK", "FR", "IT", "ES", "UA", "PL", "RO")
 # RU:Russia, TR:Turkey, DE:Germany, UK:UnitedKingdom, FR:France, IT:Italy, ES:Spain, UA:Ukraine, PL:Poland, RO:Romania
@@ -247,7 +247,7 @@ Some country lines start later than others because not all countries have data a
 
 ## 3.4 Visualize spatial variation
 
-```{r visualise_map}
+```{r visualise_map, echo=FALSE}
 latest_year <- max(final_gap_data$TIME_PERIOD, na.rm = TRUE)
 
 gap_map_data <- final_gap_data %>%
@@ -349,7 +349,7 @@ A map is used because the goal is to visualise differences across geographic spa
 ## 3.5 Visualize sub-population variation
 
 What is the obesity rate by country?
-```{r visualise_subpopulations}
+```{r visualise_subpopulations, echo=FALSE}
 
 subpop_data <- bmi_edu %>%
   filter(
