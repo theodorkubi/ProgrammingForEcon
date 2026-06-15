@@ -1,6 +1,6 @@
 ---
 title: "The education-obesity link across countries over time"
-author: "Anastasios Goudras(2855565), Thedor(), Stefan(), Omar(), Ingmar(2890403), Diego Melendez(2841772)"
+author: "Anastasios Goudras(2855565), Thedor(), Stefan Ivanov(2892839), Omar(), Ingmar(2890403), Diego Melendez(2841772)"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output:
   pdf_document:
@@ -385,7 +385,7 @@ ggplot(subpop_data, aes(x = edu_level, y = values)) +
 
 ```
 
-The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate. Here you provide a description of why the plot above is relevant to your specific social problem.
+The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate.
 
 ## 3.6 Event analysis
 
@@ -448,13 +448,12 @@ ggplot(event_plot_data, aes(x = factor(year), y = obesity_rate,
 
 The plot above is relevant to our social problem because it shows per country if our hypothesis is true. It also shows for which countries the theory holds more. The reason why we put the regression line with confidence band is because it clearly shows which countries are the outliers in obesity rates and which are exceptions. The plot for example shows that in Croatia the lower educated has more than double obesity rate than higher educated. This is also visible in the spatial variation. So it is clear that our graphs support each other.
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
 
 # Part 4 - Discussion
 
 ## 4.1 Discuss your findings
 
-Using two Eurostat datasets on BMI, education, and obesity trends, we cleaned, filtered, and merged the data, then derived three variables: an education label, a low-vs-high-education obesity gap, and the change in that gap between waves. The temporal analysis showed that obesity rates have generally increased across the largest European countries over time, though the pace and starting points differ considerably. Spatially, the education-obesity gap varies strongly across countries, with Croatia, Turkey and Luxembourg showing the largest gaps and Estonia showing a near-zero or even reversed pattern. The sub-population boxplots confirmed that lower education is consistently associated with higher obesity rates across all countries in the dataset. Finally, the event analysis showed a moderate positive correlation (r ≈ 0.50) between obesity rates among high and low educated groups, meaning that countries where highly educated people have higher obesity also tend to have higher obesity among the low educated, though the gap between the two groups still persists everywhere, suggesting that education-related inequality in obesity is a structural feature rather than a country-specific anomaly. While self-reported BMI likely understates obesity, the analysis is purely descriptive, the country-level aggregates risk an ecological fallacy, and the moderate correlation leaves much unexplained, the harmonized Eurostat data and the agreement across all four methods still make the education-obesity link convincing.
+Using two Eurostat datasets on BMI, education, and obesity trends, we cleaned, filtered, and merged the data, then derived three variables: an education label, a low-vs-high-education obesity gap, and the change in that gap between waves. The temporal analysis showed that obesity rates have generally increased across the largest European countries over time, though the pace and starting points differ considerably. Spatially, the education-obesity gap varies strongly across countries, with Croatia, Turkey and Luxembourg showing the largest gaps and Estonia showing a near-zero or even reversed pattern. The sub-population boxplots confirmed that lower education is consistently associated with higher obesity rates across all countries in the dataset. Finally, the event analysis showed a moderate positive correlation r of approximately 0.50 between obesity rates among high and low educated groups, meaning that countries where highly educated people have higher obesity also tend to have higher obesity among the low educated, though the gap between the two groups still persists everywhere, suggesting that education-related inequality in obesity is a structural feature rather than a country-specific anomaly. While self-reported BMI likely understates obesity, the analysis is purely descriptive, the country-level aggregates risk an ecological fallacy, and the moderate correlation leaves much unexplained, the harmonized Eurostat data and the agreement across all four methods still make the education-obesity link convincing.
 
 # Part 5 - Reproducibility
 
