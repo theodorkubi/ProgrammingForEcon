@@ -389,43 +389,6 @@ ggplot(subpop_data, aes(x = edu_level, y = values)) +
 
 The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate. Here you provide a description of why the plot above is relevant to your specific social problem.
 
-
-```{r}
-subpop_data <- bmi_edu %>%
-  filter(
-    bmi == "BMI_GE30",
-    isced11 %in% c("ED0-2", "ED3_4", "ED5-8"),
-    sex == "T",
-    age == "TOTAL"
-  ) %>%
-  mutate(
-    edu_level = case_when(
-      isced11 == "ED0-2" ~ "Low",
-      isced11 == "ED3_4" ~ "Medium",
-      isced11 == "ED5-8" ~ "High"
-    ),
-    edu_level = factor(edu_level, levels = c("Low", "Medium", "High"))
-  ) %>%
-  drop_na(values)
-
-ggplot(subpop_data, aes(x = edu_level, y = values)) +
-  geom_boxplot(fill = "steelblue", alpha = 0.7) +
-  labs(
-    title = "Obesity rates by education level",
-    subtitle = "Distribution across European countries (2014 & 2019)",
-    x = "Education level",
-    y = "Obesity rate (%)"
-  ) +
-  theme_minimal()
-
-#line 241-246 selects the data that is been used
-#line 249-252 gives the three education groups understandable names
-#line 254 fixes the order of education levels
-#line 258-264 creates the boxplot with title and axis labels
-```
-
-The plot above is relevant because it clearly shows how a lower education level is correlated to a higher obesity rate.
-
 ## 3.6 Event analysis
 
 In this section we analyze how obesity rates among low and high educated groups relate to each other across countries.
