@@ -253,11 +253,43 @@ latest_year <- max(final_gap_data$TIME_PERIOD, na.rm = TRUE)
 gap_map_data <- final_gap_data %>%
   filter(TIME_PERIOD == latest_year) %>%
   mutate(
-    iso_a2 = recode(
+    country_name = recode(
       geo,
-      "EL" = "GR",
+      "AT" = "Austria",
+      "BE" = "Belgium",
+      "BG" = "Bulgaria",
+      "CH" = "Switzerland",
+      "CY" = "Cyprus",
+      "CZ" = "Czechia",
+      "DE" = "Germany",
+      "DK" = "Denmark",
+      "EE" = "Estonia",
+      "EL" = "Greece",
+      "ES" = "Spain",
+      "FI" = "Finland",
+      "FR" = "France",
+      "HR" = "Croatia",
+      "HU" = "Hungary",
+      "IE" = "Ireland",
+      "IS" = "Iceland",
+      "IT" = "Italy",
+      "LT" = "Lithuania",
+      "LU" = "Luxembourg",
+      "LV" = "Latvia",
+      "MT" = "Malta",
+      "NL" = "Netherlands",
+      "NO" = "Norway",
+      "PL" = "Poland",
+      "PT" = "Portugal",
+      "RO" = "Romania",
+      "RS" = "Serbia",
+      "SE" = "Sweden",
+      "SI" = "Slovenia",
+      "SK" = "Slovakia",
+      "TR" = "Turkey",
+      "UK" = "United Kingdom",
+      "GB" = "United Kingdom",
       .default = geo
-      
     )
   )
 
@@ -266,10 +298,20 @@ europe_map <- ne_countries(
   continent = "Europe",
   returnclass = "sf"
 ) %>%
-  select(iso_a2, name, geometry)
+  mutate(
+    country_name = case_when(
+      name == "France" ~ "France",
+      name == "United Kingdom" ~ "United Kingdom",
+      name == "Czechia" ~ "Czechia",
+      name == "Türkiye" ~ "Turkey",
+      name == "Turkey" ~ "Turkey",
+      TRUE ~ name
+    )
+  ) %>%
+  select(country_name, geometry)
 
 spatial_map <- europe_map %>%
-  left_join(gap_map_data, by = "iso_a2")
+  left_join(gap_map_data, by = "country_name")
 
 ggplot(spatial_map) +
   geom_sf(aes(fill = obesity_gap), color = "white", linewidth = 0.2) +
