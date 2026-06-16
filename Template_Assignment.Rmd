@@ -56,8 +56,8 @@ obesity_trend <- read_csv("data/obesity_trend.csv")
 ## 2.2 Provide a short summary of the dataset(s)
 
 ```{r}
-head(bmi_edu)
-head(obesity_trend)
+head(bmi_edu, 3)
+head(obesity_trend, 3)
 ```
 Our first dataset, bmi_edu (Eurostat code hlth_ehis_bm1e, Body mass index (BMI) by sex, age and educational attainment level), comes from the European Health Interview Survey (EHIS), in which respondents report their own height and weight (Eurostat, n.d.-a). For each country and year it gives the share of people in each BMI category, broken down by education level, sex, and age. EHIS runs only every few years, so the data covers mainly the 2014 and 2019 waves. This is the dataset that links weight to education, so it is central to our analysis.
 
@@ -128,6 +128,10 @@ combined_dataset <- inner_join(bmi_edu_clean, obesity_trend_clean, by = c("geo",
 
 Step 3: We perform a multi-key inner_join to merge bmi_edu_clean and obesity_trend_clean by country(geo) and year (TIME_PERIOD).This aligns the education-specific obesity rates side-by-side with national obesity trends for comparison by country and year. 
 
+These cleaning choices involve trade offs worth flagging. The inner_join keeps only the country year combinations present in both datasets; because bmi_edu is collected only in 2014 and 2019, the merged combined_dataset is effectively limited to those two waves, even though obesity_trend on its own runs from 2008 to 2025. This is a deliberate cost: the merge buys us the education breakdown but sacrifices time depth, which is exactly why the temporal and event analyses below draw directly on the unmerged obesity_trend_clean instead. Filtering to combined sexes and the total age group, and dropping rows with missing values, likewise trades finer grained coverage for a clean, comparable baseline. A natural refinement would be to keep the two cleaned datasets separate and merge them only where an analysis genuinely needs both, rather than treating the joined file as the single source for everything.
+
+
+
 ## 3.2 Generate necessary variables
 
 We created three new variables which add analytical value
@@ -194,7 +198,7 @@ The variable `gap_change` measures whether educational inequality in obesity wid
 
 ## 3.3 Visualize temporal variation
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height=3.8}
 # First I make a vector of the landcodes of the countries in Europe with the largest population, because using every country from the datasets will make the visualisation really chaotic.
 largest_european_countries <- c("RU", "TR", "DE", "UK", "FR", "IT", "ES", "UA", "PL", "RO")
 # RU:Russia, TR:Turkey, DE:Germany, UK:UnitedKingdom, FR:France, IT:Italy, ES:Spain, UA:Ukraine, PL:Poland, RO:Romania
@@ -244,13 +248,13 @@ mutate(
 # Also lines 223-234: the codes show how the lines are shown for example the width etc, it also creates the titles and the info of everything that is shown in the visualisation.
   
 ```
-This figure shows temporal variation in obesity rates for the largest European countries available in the dataset. Full country names are used in the legend to make the graph easier to interpret. 
-
+This figure shows temporal variation in obesity rates for the largest European countries available in the dataset. Full country names are used in the legend to make the graph easier to interpret.
+Across the full period the general direction is upward: most of these countries show higher obesity rates in their latest year than in their earliest, consistent with a broad rise in obesity across Europe. The levels, however, stay clearly separated. Turkey and the United Kingdom sit near the top throughout, while Romania and Italy remain the lowest, and the gap between the highest and lowest prevalence countries does not noticeably close over time. A few series are also non monotonic, Italy in particular swings up and down between waves, which likely reflects the sparse, every-few-years nature of the survey rather than genuine year to year reversals.
 Some country lines start later than others because not all countries have data available for every year in the dataset. When a country has missing observations in earlier years, the line only starts from the first year for which data is available. Therefore, differences in starting points reflect differences in data availability, not necessarily differences in when obesity became relevant in those countries.
 
 ## 3.4 Visualize spatial variation
 
-```{r visualise_map, echo=FALSE}
+```{r visualise_map, echo=FALSE, fig.height=4.2}
 latest_year <- max(final_gap_data$TIME_PERIOD, na.rm = TRUE)
 
 gap_map_data <- final_gap_data %>%
@@ -359,7 +363,7 @@ ggplot(spatial_map) +
 ```
 
 This map shows spatial variation in the education-obesity gap across European countries in the latest available year. The education-obesity gap is calculated as the obesity rate among people with low education minus the obesity rate among people with high education. A higher positive value means that obesity is more common among the low educated group compared with the high educated group.
-
+The gap is far from uniform across Europe. It is widest by some margin in Croatia, which stands out as the clear outlier, with other comparatively large gaps in southern and south eastern Europe. At the other end, the gap is small in much of the north, and Estonia is a notable anomaly where the pattern is close to zero or even reversed high educated groups are about as likely to be obese as low educated ones. Read this way, the map shows that educational inequality in obesity is not a single European pattern but is concentrated in particular regions rather than spread evenly across the continent.
 A map is used because the goal is to visualise differences across geographic space. By placing the values directly on a map of Europe, it becomes easier to see whether the education-obesity gap is larger or smaller in specific parts of Europe. Countries shown in grey either have no available data for the selected year or could not be matched correctly with the map data. To reduce matching problems, country codes from the dataset were converted into full country names before joining the obesity data to the map.
 
 ## 3.5 Visualize sub-population variation
@@ -441,9 +445,8 @@ ggplot(event_data, aes(x = reorder(geo, change), y = change, fill = direction)) 
   theme_minimal()
 ```
 
-This plot treats the COVID-19 pandemic as an event and compares obesity level of all EU countries before it (2019) and after it (2022). This graph shows that in most countries the obesity rate decreased. This really goes against everyone's thought that obesity should have increased during the pandemic. This raises the question if the data that we used is sufficient.
-This graph all matters for our social problem because an event like this can change the life for a lot of people. Since we want to know how a difference in life can change obesity, Covid can help explain it.
-Unfortunately our data cannot give a full explanation how covid changed obesity because there is a difference in countries where it increased and where it decreased. We also don't have the data for the different education groups of obesity rates of 2022. 
+This plot treats the COVID-19 pandemic as an event and compares each country's obesity rate before it (2019) and after it (2022). Contrary to the common expectation that lockdowns and disrupted routines would push obesity upward, most countries show a small decrease over this window, with only a minority recording an increase. This counter-intuitive result and the fact that countries move in both directions rather than shifting together suggests either that the pandemic was not a uniform shock to measured obesity, or that self reported survey data does not fully capture what happened during these years. The analysis is purely descriptive and cannot establish that COVID-19 caused these changes. A further limitation is that obesity_trend carries no education breakdown for 2022, so while we can track the overall rate around the event, we cannot test the question most central to our project: whether the pandemic widened or narrowed the gap between low- and high-educated groups.
+
 
 # Part 4 - Discussion
 
