@@ -108,6 +108,7 @@ bmi_edu_clean <- bmi_edu %>%
 ```
 
 Step 1: We filter out the bmi_edu dataset, to isolate obesity rates(BMI_GE=>30) across three core education levels ( ED0-2 for low, ED3_4 for medium and ED5-8 for high). We restricted the demographics to combined sexes (T) and combined adult age group (TOTAL) to establish a baseline for comparing education levels against obesity prevalance.
+
 **Cleaning Step 2: Filter and clean the second dataset**
 ```{r}
 
