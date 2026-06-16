@@ -7,6 +7,7 @@ author: |
   | Anastasios Goudras (2855565), Theodor Kubicka (2847510),
   | Stefan Ivanov (2892839), Omar El-Nawawi (2894419),
   | Ingmar Reijers (2890403), Diego Melendez (2841772)
+  | Jaco Koorn (2896152)
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output:
   pdf_document:
@@ -410,54 +411,32 @@ In this section we treat the COVID-19 pandemic as an event and compare EU27 obes
 ```{r analysis, echo=FALSE}
 
 # Our event is the COVID-19 pandemic (2020-2022)
-# Pre-event: 2019 (bmi_edu_clean — education stratified)
-# Post-event: 2022 (obesity_trend_clean — overall rate)
+# Comparing overall obesity rates before (2019) and after (2022) the event,
+# across all countries available in obesity_trend_clean.
 
-# Step 1: Get EU27 obesity rate per education group for 2019
-edu_2019 <- bmi_edu_clean %>%
-  filter(TIME_PERIOD == 2019, geo == "EU27_2020") %>%
+# Step 1: Get obesity rate per country for 2019 and 2022, side by side
+event_data <- obesity_trend_clean %>%
+  filter(TIME_PERIOD %in% c(2019, 2022)) %>%
+  pivot_wider(names_from = TIME_PERIOD, values_from = trend_value,
+              names_prefix = "y") %>%
+  drop_na(y2019, y2022) %>%
   mutate(
-    edu_level = case_when(
-      isced11 == "ED0-2" ~ "Low",
-      isced11 == "ED3_4" ~ "Medium",
-      isced11 == "ED5-8" ~ "High"
-    ),
-    edu_level = factor(edu_level, levels = c("Low", "Medium", "High")),
-    year = 2019
-  ) %>%
-  select(edu_level, year, obesity_rate = bmi_value)
+    change     = y2022 - y2019,
+    direction  = if_else(change > 0, "Increased", "Decreased")
+  )
 
-# Step 2: Get EU27 overall obesity rate for 2022
-overall_2022 <- obesity_trend_clean %>%
-  filter(TIME_PERIOD == 2022, geo == "EU27_2020") %>%
-  summarise(obesity_rate = mean(trend_value, na.rm = TRUE)) %>%
-  crossing(
-    edu_level = factor(c("Low", "Medium", "High"), levels = c("Low", "Medium", "High"))
-  ) %>%
-  mutate(year = 2022)
-
-# Step 3: Combine and plot
-event_plot_data <- bind_rows(edu_2019, overall_2022)
-
-ggplot(event_plot_data, aes(x = factor(year), y = obesity_rate,
-                             color = edu_level, group = edu_level)) +
-  geom_line(linewidth = 1.3) +
-  geom_point(size = 3.5) +
-  annotate("rect", xmin = 1.5, xmax = 2.5,
-           ymin = -Inf, ymax = Inf, fill = "grey80", alpha = 0.3) +
-  annotate("text", x = 1.5, y = Inf,
-           label = "COVID-19 (2020)", vjust = 2, hjust = 0.5,
-           size = 3.5, colour = "grey40") +
-  scale_color_manual(
-    values = c("Low" = "#E64B35", "Medium" = "#4DBBD5", "High" = "#00A087")
-  ) +
+# Step 2: Plot — change in obesity rate per country, ranked
+ggplot(event_data, aes(x = reorder(geo, change), y = change, fill = direction)) +
+  geom_col() +
+  geom_hline(yintercept = 0, colour = "grey30") +
+  coord_flip() +
+  scale_fill_manual(values = c("Increased" = "#E64B35", "Decreased" = "#00A087")) +
   labs(
-    title    = "Event Analysis: COVID-19 and Obesity by Education Group (EU27)",
-    subtitle = "Pre-event: 2019  |  Post-event: 2022",
-    x        = "Year",
-    y        = "Obesity rate (%)",
-    color    = "Education level",
-    caption  = "Note: 2022 uses EU27 overall rate as education breakdown is unavailable for 2022."
+    title    = "Change in Obesity Rate: Before vs After COVID-19",
+    subtitle = "Comparing 2019 (pre-event) and 2022 (post-event) across countries",
+    x        = "Country",
+    y        = "Change in obesity rate (percentage points)",
+    fill     = "2019 → 2022"
   ) +
   theme_minimal()
 ```
