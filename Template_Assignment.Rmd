@@ -406,7 +406,7 @@ Obesity is most prevalent among the low educated (median around 19%), lower amon
 
 ## 3.6 Event analysis
 
-In this section we treat the COVID-19 pandemic as an event and compare EU27 obesity rates by education level before (2019) and after (2022) it.
+In this section we treat the COVID-19 pandemic as an event and compare the obesity rates of all EU countries before (2019) and after (2022) it.
 
 ```{r analysis, echo=FALSE}
 
@@ -441,9 +441,9 @@ ggplot(event_data, aes(x = reorder(geo, change), y = change, fill = direction)) 
   theme_minimal()
 ```
 
-This plot treats the COVID-19 pandemic as an event and compares obesity at the EU27 level before it (2019) and after it (2022). In 2019 the education gradient is clear: obesity stood at 18.4% among the low educated, 17.1% among the medium educated, and 11.4% among the high educated, a gap of roughly 7 percentage points between the lowest and highest education groups. After the pandemic, the overall EU27 obesity rate in 2022 was 14.8%. This matters for our social problem because it shows the education gap was already substantial going into a major shared shock, raising the question of whether such an event widens or narrows existing inequalities.
-
-An important limitation must be read alongside the plot. The 2022 figure is the EU27 overall obesity rate, because the survey does not provide a 2022 breakdown by education. The three lines therefore converge to the same point in 2022 only because they are all assigned that single overall value, it is an artifact of missing data, not evidence that the education gap closed during COVID-19. As a result, we can describe obesity before and after the event but cannot attribute any change to the pandemic itself, nor measure how it affected the gap between education groups specifically.
+This plot treats the COVID-19 pandemic as an event and compares obesity level of all EU countries before it (2019) and after it (2022). This graph shows that in most countries the obesity rate decreased. This really goes against everyone's thought that obesity should have increased during the pandemic. This raises the question if the data that we used is sufficient.
+This graph all matters for our social problem because an event like this can change the life for a lot of people. Since we want to know how a difference in life can change obesity, Covid can help explain it.
+Unfortunately our data cannot give a full explanation how covid changed obesity because there is a difference in countries where it increased and where it decreased. We also don't have the data for the different education groups of obesity rates of 2022. 
 
 # Part 4 - Discussion
 
