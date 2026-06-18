@@ -411,7 +411,7 @@ Obesity is most prevalent among the low educated (median around 19%), lower amon
 
 ## 3.6 Event analysis
 
-In this section we treat the COVID-19 pandemic as an event and compare the obesity rates of all EU countries before (2019) and after (2022) it.
+In this section we treat the COVID-19 pandemic as an event and look at the obesity rates of the biggest European countries in the dataset.
 
 ```{r analysis}
 
@@ -462,7 +462,7 @@ ggplot(event_trend_data, aes(x = TIME_PERIOD, y = trend_value,
   theme_minimal()
 ```
 
-This plot treats the COVID-19 pandemic as an event and shows the biggest European country's obesity rate until (2022). Contrary to the common expectation that lockdowns and disrupted routines would push obesity upward, most countries show a small decrease over this window, with only a minority recording an increase. This counter-intuitive result and the fact that countries move in both directions rather than shifting together suggests either that the pandemic was not a uniform shock to measured obesity, or that self reported survey data does not fully capture what happened during these years. The analysis is purely descriptive and cannot establish that COVID-19 caused these changes. A further limitation is that obesity_trend carries no education breakdown for 2022, so while we can track the overall rate around the event, we cannot test the question most central to our project: whether the pandemic widened or narrowed the gap between low- and high-educated groups.
+This plot treats the COVID-19 pandemic as an event, with the dashed vertical line marking the start of the pandemic in 2020. This plot tracks the obesity rates for the largest European countries in the data set across the surrounding years. The reason only the largest European countries are included is because, if all EU countries would be included, the legend would be too cluttered to be useful. Contrary to the common expectations that lockdowns would push obesity upward after 2020, the trends after the event showed that obesity in most countries even decreased or stayed similar. This suggests that either the pandemic was not a uniform shock to measured obesity, or that self reported survey data does not fully capture what happened during these years. The analysis is purely descriptive and cannot establish that COVID-19 caused these changes, partly because survey waves are several years apart and do not allow us to observe a sharp before/after jump. A further limitation is that the obesity trend data carries no education breakdown for 2022, so while we can track the overall rate around the event we cannot test the question most central to our project; whether the pandemic widened or narrowed the gap between low- and high-educated groups. 
 
 
 # Part 4 - Discussion
