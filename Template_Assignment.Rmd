@@ -413,40 +413,56 @@ Obesity is most prevalent among the low educated (median around 19%), lower amon
 
 In this section we treat the COVID-19 pandemic as an event and compare the obesity rates of all EU countries before (2019) and after (2022) it.
 
-```{r analysis, echo=FALSE}
+```{r analysis}
 
-# Our event is the COVID-19 pandemic (2020-2022)
-# Comparing overall obesity rates before (2019) and after (2022) the event,
-# across all countries available in obesity_trend_clean.
+# Event: COVID-19 (2020)
+# A temporal graph showing obesity rate trends over time for the largest
+# European countries, with a clear vertical line marking the COVID-19 event.
 
-# Step 1: Get obesity rate per country for 2019 and 2022, side by side
-event_data <- obesity_trend_clean %>%
-  filter(TIME_PERIOD %in% c(2019, 2022)) %>%
-  pivot_wider(names_from = TIME_PERIOD, values_from = trend_value,
-              names_prefix = "y") %>%
-  drop_na(y2019, y2022) %>%
+# Reuse the same country selection as section 3.3 
+largest_european_countries_in_dataset <- c("TR", "DE", "UK", "FR", "IT", "ES", "PL", "RO")
+
+selected_countries <- largest_european_countries_in_dataset[
+  largest_european_countries_in_dataset %in% obesity_trend_clean$geo
+]
+
+event_trend_data <- obesity_trend_clean %>%
+  filter(geo %in% selected_countries) %>%
   mutate(
-    change     = y2022 - y2019,
-    direction  = if_else(change > 0, "Increased", "Decreased")
+    country_name = case_when(
+      geo == "TR" ~ "Turkey",
+      geo == "DE" ~ "Germany",
+      geo == "UK" ~ "United Kingdom",
+      geo == "FR" ~ "France",
+      geo == "IT" ~ "Italy",
+      geo == "ES" ~ "Spain",
+      geo == "PL" ~ "Poland",
+      geo == "RO" ~ "Romania",
+      TRUE ~ geo
+    )
   )
 
-# Step 2: Plot — change in obesity rate per country, ranked
-ggplot(event_data, aes(x = reorder(geo, change), y = change, fill = direction)) +
-  geom_col() +
-  geom_hline(yintercept = 0, colour = "grey30") +
-  coord_flip() +
-  scale_fill_manual(values = c("Increased" = "#E64B35", "Decreased" = "#00A087")) +
+ggplot(event_trend_data, aes(x = TIME_PERIOD, y = trend_value,
+                              color = country_name, group = country_name)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2020, linetype = "dashed",
+             colour = "black", linewidth = 1) +
+  annotate("text", x = 2020, y = max(event_trend_data$trend_value, na.rm = TRUE),
+           label = "COVID-19 (2020)", angle = 90, vjust = -0.5, hjust = 1,
+           size = 3.5, colour = "black") +
+  scale_x_continuous(breaks = sort(unique(obesity_trend_clean$TIME_PERIOD))) +
   labs(
-    title    = "Change in Obesity Rate: Before vs After COVID-19",
-    subtitle = "Comparing 2019 (pre-event) and 2022 (post-event) across countries",
-    x        = "Country",
-    y        = "Change in obesity rate (percentage points)",
-    fill     = "2019 → 2022"
+    title    = "Event Analysis: Obesity Rate Trends Before and After COVID-19",
+    subtitle = "Largest European countries in the dataset | Vertical line marks COVID-19 onset (2020)",
+    x        = "Year",
+    y        = "Obesity rate (%)",
+    color    = "Country"
   ) +
   theme_minimal()
 ```
 
-This plot treats the COVID-19 pandemic as an event and compares each country's obesity rate before it (2019) and after it (2022). Contrary to the common expectation that lockdowns and disrupted routines would push obesity upward, most countries show a small decrease over this window, with only a minority recording an increase. This counter-intuitive result and the fact that countries move in both directions rather than shifting together suggests either that the pandemic was not a uniform shock to measured obesity, or that self reported survey data does not fully capture what happened during these years. The analysis is purely descriptive and cannot establish that COVID-19 caused these changes. A further limitation is that obesity_trend carries no education breakdown for 2022, so while we can track the overall rate around the event, we cannot test the question most central to our project: whether the pandemic widened or narrowed the gap between low- and high-educated groups.
+This plot treats the COVID-19 pandemic as an event and shows the biggest European country's obesity rate until (2022). Contrary to the common expectation that lockdowns and disrupted routines would push obesity upward, most countries show a small decrease over this window, with only a minority recording an increase. This counter-intuitive result and the fact that countries move in both directions rather than shifting together suggests either that the pandemic was not a uniform shock to measured obesity, or that self reported survey data does not fully capture what happened during these years. The analysis is purely descriptive and cannot establish that COVID-19 caused these changes. A further limitation is that obesity_trend carries no education breakdown for 2022, so while we can track the overall rate around the event, we cannot test the question most central to our project: whether the pandemic widened or narrowed the gap between low- and high-educated groups.
 
 
 # Part 4 - Discussion
